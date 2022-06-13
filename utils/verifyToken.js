@@ -24,6 +24,7 @@ export const verifyToken = (req, res, next) => {
 export const verifyUser = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.id === req.params.id || req.user.isAdmin) {
+      next(); //if user is admin or if user is the same as the id in the url call the next middleware or users endpoint
     } else {
       return res.status(403).json({
         success: false,
