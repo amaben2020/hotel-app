@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoute from "./routes/auth.js";
 import hotelRoute from "./routes/hotels.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -30,11 +31,14 @@ mongoose.disconnect = async () => {
 
 const app = express();
 
+app.use(cookieParser());
+
 //middlewares :
 app.use(express.json()); //for parsing json
 app.use("/api/auth", authRoute);
 app.use("/api/hotels", hotelRoute);
 
+//This middleware would run after any route runs
 //error handling middleware : customizing error message
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
