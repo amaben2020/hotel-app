@@ -1,5 +1,4 @@
-import User from "../models/user.js";
-
+import User from "../models/User.js";
 //controller: These are functions that CRUD resources in the database
 //They are responsible for using the model to interact with the database
 //CREATE: req is what you are taking from user and saving in the database, res is what you are sending back to user
