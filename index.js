@@ -30,10 +30,22 @@ mongoose.disconnect = async () => {
 
 const app = express();
 
-//middlewares
+//middlewares :
 app.use(express.json()); //for parsing json
 app.use("/api/auth", authRoute);
 app.use("/api/hotels", hotelRoute);
+
+//error handling middleware : customizing error message
+app.use((err, req, res, next) => {
+  const errorStatus = err.status || 500;
+  const errorMessage = err.message || "Something went wrong";
+  return res.status(errorStatus).json({
+    success: false,
+    status: errorStatus,
+    message: errorMessage,
+    stack: err.stack,
+  });
+});
 
 const connectionText = async () => {
   await connect();
