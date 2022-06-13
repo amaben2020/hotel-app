@@ -1,5 +1,5 @@
-import Hotel from "../models/Hotel";
-import Room from "../models/Room";
+import Hotel from "../models/Hotel.js";
+import Room from "../models/Room.js";
 
 export const createRoom = async (req, res, next) => {
   const hotelId = req.params.hotelId;
@@ -10,6 +10,7 @@ export const createRoom = async (req, res, next) => {
 
     try {
       await Hotel.findByIdAndUpdate(hotelId, {
+        //the id of the room is being saved in the Hotel model as reference
         $push: { rooms: savedRoom._id },
       });
     } catch (error) {
@@ -37,8 +38,16 @@ export const updateRoom = async (req, res) => {
 };
 
 export const deleteRoom = async (req, res) => {
+  const hotelId = req.params.hotelId;
   try {
     await Room.findByIdAndDelete(req.params.id);
+    try {
+      await Hotel.findByIdAndUpdate(hotelId, {
+        $pull: { rooms: req.params.id },
+      });
+    } catch (error) {
+      console.log(error);
+    }
     res.status(200).json("Room deleted");
   } catch (error) {
     res.status(500).send(error);
@@ -49,7 +58,7 @@ export const getRoom = async (req, res) => {
   const { id } = req.params;
   try {
     const room = await Room.findById(id);
-    res.status(200).json(Room);
+    res.status(200).json(room);
   } catch (error) {
     res.status(500).json(error);
   }
