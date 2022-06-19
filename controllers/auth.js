@@ -9,8 +9,7 @@ export const register = async (req, res, next) => {
     const hash = bcrypt.hashSync(req.body.password, salt);
 
     const user = new User({
-      username,
-      email,
+      ...req.body,
       password: hash,
     });
 
@@ -52,7 +51,7 @@ export const login = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .json({ ...otherProps });
+      .json({ details: { ...otherProps }, isAdmin });
   } catch (error) {
     next(error);
   }

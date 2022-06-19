@@ -1,4 +1,5 @@
 import Hotel from "../models/Hotel.js";
+import Room from "../models/Room.js";
 
 //controller: These are functions that CRUD resources in the database
 //They are responsible for using the model to interact with the database
@@ -115,6 +116,23 @@ export const countByTypes = async (req, res, next) => {
       { type: "villa", count: await villaCount },
       { type: "cabin", count: await cabinCount },
     ]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getHotelRooms = async (req, res, next) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+
+    console.log(hotel);
+
+    const list = await Promise.all(
+      hotel.rooms.map((room) => {
+        return Room.findById(room);
+      })
+    );
+    res.status(200).json(list);
   } catch (error) {
     next(error);
   }

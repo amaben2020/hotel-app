@@ -8,6 +8,20 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
+    country: {
+      type: String,
+      required: true,
+    },
+    img: {
+      type: String,
+    },
+    profile: {
+      type: String,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
